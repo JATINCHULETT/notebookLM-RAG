@@ -19,7 +19,14 @@ export async function POST(req: Request) {
 
     if (file.name.toLowerCase().endsWith(".pdf")) {
       const blob = new Blob([await file.arrayBuffer()], { type: file.type });
-      const loader = new WebPDFLoader(blob, { splitPages: false });
+      const loader = new WebPDFLoader(blob, { 
+        splitPages: false,
+        pdfjs: async () => {
+          // Explicitly import pdfjs-dist to avoid Langchain's pdf-parse fallback
+          const mod = await import("pdfjs-dist/legacy/build/pdf.mjs");
+          return { getDocument: mod.getDocument, version: mod.version, isV2: false };
+        }
+      });
       loadedDocs = await loader.load();
     } else {
       const text = Buffer.from(await file.arrayBuffer()).toString("utf-8");
