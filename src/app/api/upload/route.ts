@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
-import "pdf-parse"; // Force Vercel to bundle this dependency
 import { v4 as uuidv4 } from "uuid";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 import { QdrantVectorStore } from "@langchain/qdrant";
-import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
+import { WebPDFLoader } from "@langchain/community/document_loaders/web/pdf";
 import { Document } from "@langchain/core/documents";
 
 export async function POST(req: Request) {
@@ -20,7 +19,7 @@ export async function POST(req: Request) {
 
     if (file.name.toLowerCase().endsWith(".pdf")) {
       const blob = new Blob([await file.arrayBuffer()], { type: file.type });
-      const loader = new PDFLoader(blob, { splitPages: false });
+      const loader = new WebPDFLoader(blob, { splitPages: false });
       loadedDocs = await loader.load();
     } else {
       const text = Buffer.from(await file.arrayBuffer()).toString("utf-8");
