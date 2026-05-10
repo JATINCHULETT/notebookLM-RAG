@@ -7,7 +7,7 @@ import { QdrantVectorStore } from "@langchain/qdrant";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { RunnableSequence, RunnablePassthrough } from "@langchain/core/runnables";
-import { formatDocumentsAsString } from "langchain/util/document";
+const formatDocumentsAsString = (documents: any[]) => documents.map((doc) => doc.pageContent).join("\n\n");
 
 export async function POST(req: Request) {
   try {
