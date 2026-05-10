@@ -1,8 +1,5 @@
 import { NextResponse } from "next/server";
 import "pdf-parse"; // Force Vercel to bundle this dependency
-import dns from 'dns';
-dns.setDefaultResultOrder('ipv4first');
-dns.setServers(['8.8.8.8', '1.1.1.1']);
 import { v4 as uuidv4 } from "uuid";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";

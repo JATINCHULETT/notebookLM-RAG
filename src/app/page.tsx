@@ -43,7 +43,13 @@ export default function Home() {
         body: formData,
       });
 
-      const data = await res.json();
+      const textData = await res.text();
+      let data;
+      try {
+        data = JSON.parse(textData);
+      } catch (err) {
+        throw new Error(`Vercel Server Error: ${textData.substring(0, 50)}... Make sure your PDF is under 4MB and Vercel ENV keys are set.`);
+      }
 
       if (!res.ok) throw new Error(data.error || "Upload failed");
 
@@ -78,7 +84,13 @@ export default function Home() {
         body: JSON.stringify({ message: userMessage, collectionName }),
       });
 
-      const data = await res.json();
+      const textData = await res.text();
+      let data;
+      try {
+        data = JSON.parse(textData);
+      } catch (err) {
+        throw new Error(`Vercel Server Error: ${textData.substring(0, 50)}...`);
+      }
 
       if (!res.ok) throw new Error(data.error || "Failed to get response");
 

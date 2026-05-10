@@ -1,7 +1,4 @@
 import { NextResponse } from "next/server";
-import dns from 'dns';
-dns.setDefaultResultOrder('ipv4first');
-dns.setServers(['8.8.8.8', '1.1.1.1']);
 import { GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { QdrantVectorStore } from "@langchain/qdrant";
 import { PromptTemplate } from "@langchain/core/prompts";
