@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
+import "pdf-parse"; // Force Vercel to trace the module
 import { v4 as uuidv4 } from "uuid";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 import { QdrantVectorStore } from "@langchain/qdrant";
-import { WebPDFLoader } from "@langchain/community/document_loaders/web/pdf";
+import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { Document } from "@langchain/core/documents";
 
 export async function POST(req: Request) {
@@ -19,14 +20,7 @@ export async function POST(req: Request) {
 
     if (file.name.toLowerCase().endsWith(".pdf")) {
       const blob = new Blob([await file.arrayBuffer()], { type: file.type });
-      const loader = new WebPDFLoader(blob, { 
-        splitPages: false,
-        pdfjs: async () => {
-          // Explicitly import pdfjs-dist to avoid Langchain's pdf-parse fallback
-          const mod = await import("pdfjs-dist/legacy/build/pdf.mjs");
-          return { getDocument: mod.getDocument, version: mod.version, isV2: false };
-        }
-      });
+      const loader = new PDFLoader(blob, { splitPages: false });
       loadedDocs = await loader.load();
     } else {
       const text = Buffer.from(await file.arrayBuffer()).toString("utf-8");

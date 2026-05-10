@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Clean configuration
+  serverExternalPackages: ["pdf-parse"],
+  outputFileTracingIncludes: {
+    "/api/**/*": ["./node_modules/pdf-parse/**/*"],
+  },
 };
 
 export default nextConfig;
